@@ -2,19 +2,19 @@ import os.path, subprocess
 from subprocess import STDOUT, PIPE
 
 
-def judge_java(java_file, param, ans):
-    for idx in range(len(ans)):
+def judge_java(java_file, sample_data):
+    for idx in range(len(sample_data)):
         # java 에서 println 을 쓰면 개행이 되기 때문에 rstrip() 으로 개행 삭제
-        submit = execute_java(java_file, param[idx]).rstrip()
+        submit = execute_java(java_file, sample_data[idx]["input"]).rstrip()
 
-        answer = ans[idx]
+        answer = sample_data[idx]["output"]
         print(submit, answer)
         if answer != submit:
             print("틀렸습니다!")
-            return -1
+            return False
 
     print("맞았습니다!")
-    return 1
+    return True
 
 
 def compile_java(java_file):
@@ -40,18 +40,18 @@ def execute_python(python_file, param):
     return submit
 
 
-def judge_python(python_file, param, ans):
-    for idx in range(len(ans)):
-        submit = execute_python(python_file, param[idx]).rstrip()
+def judge_python(python_file, sample_data):
+    for idx in range(len(sample_data)):
+        submit = execute_python(python_file, sample_data[idx]["input"]).rstrip()
 
-        answer = ans[idx]
+        answer = sample_data[idx]["output"]
 
         if answer != submit:
             print("틀렸습니다!")
-            return -1
+            return False
 
     print("맞았습니다!")
-    return 1
+    return True
 
 
 def write_file(fileName, fileString, ext):
@@ -60,13 +60,13 @@ def write_file(fileName, fileString, ext):
     text_file.close()
 
 
-def divide_ext(fileString, language, in_, out_):
+def divide_ext(fileString, language, sample_data):
     if language == "java":
         write_file("Main", fileString, language)
-        judge_java("Main.java", in_, out_)
+        judge_java("Main.java", sample_data)
     elif language == "python":
         write_file("test", fileString, language)
-        judge_python("test.py", in_, out_)
+        judge_python("test.py", sample_data)
     else:
         return "error"
 
@@ -81,8 +81,16 @@ class Main {
     }
 }"""
 
-user_answer = ["1", "2", "3", "4", "4"]
-real_answer = ["1", "2", "3", "4", "4"]
+sample = [
+    {
+        "input": "1\n2\n3\n4\n5\n",
+        "output": "1\n2\n3\n4\n5\n"
+    },
+    {
+        "input": "1\n2\n3\n4\n5\n",
+        "output": "1\n2\n3\n4\n5\n"
+    }
+]
 
-divide_ext(files, 'java', user_answer, real_answer)
+divide_ext(files, 'java', sample)
 
