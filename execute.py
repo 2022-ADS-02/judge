@@ -9,9 +9,9 @@ def judge_java(java_file, sample_data):
         print("input : ", sample_data[idx]["input"])
         print("output : ", sample_data[idx]["output"])
 
-        submit = execute_java(java_file, sample_data[idx]["input"]).rstrip()
+        submit = execute_java(java_file, sample_data[idx]["input"]).rstrip().replace("\r", "")
         print('submit : ', submit)
-        answer = sample_data[idx]["output"]
+        answer = sample_data[idx]["output"].rstrip().replace("\r", "")
         if answer != submit:
             print("틀렸습니다!")
             return False
@@ -47,9 +47,9 @@ def judge_python(python_file, sample_data):
     for idx in range(len(sample_data)):
         print("input:", sample_data[idx]["input"])
         print("output:", sample_data[idx]["output"])
-        submit = execute_python(python_file, sample_data[idx]["input"]).rstrip()
+        submit = execute_python(python_file, sample_data[idx]["input"]).rstrip().replace("\r", "")
         print("submit:", submit)
-        answer = sample_data[idx]["output"].rstrip()
+        answer = sample_data[idx]["output"].rstrip().replace("\r", "")
 
         if answer != submit:
             print("틀렸습니다!")
