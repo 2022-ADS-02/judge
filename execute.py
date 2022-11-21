@@ -44,13 +44,12 @@ def execute_python(python_file, param):
 
 
 def judge_python(python_file, sample_data):
-    compile_java(python_file)
     for idx in range(len(sample_data)):
         print("input:", sample_data[idx]["input"])
         print("output:", sample_data[idx]["output"])
         submit = execute_python(python_file, sample_data[idx]["input"]).rstrip()
         print("submit:", submit)
-        answer = sample_data[idx]["output"]
+        answer = sample_data[idx]["output"].rstrip()
 
         if answer != submit:
             print("틀렸습니다!")
