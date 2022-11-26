@@ -2,9 +2,14 @@ from flask import Flask
 from flask import request
 from flask import json
 import execute
+import py_eureka_client.eureka_client as eureka_client
+
+eureka_client.init(eureka_server="http://172.17.0.1:8761/eureka",
+                   app_name="judge-service",
+                   instance_host="172.17.0.1",
+                   instance_port=9000)
 
 app = Flask(__name__)
-
 
 @app.route('/')
 def home():
