@@ -3,10 +3,11 @@ from flask import request
 from flask import json
 import execute
 import py_eureka_client.eureka_client as eureka_client
+from os import environ
 
-eureka_client.init(eureka_server="http://172.17.0.1:8761/eureka",
+eureka_client.init(eureka_server="{}:8761/eureka" .format(environ.get("EUREKA_ADDRESS", "192.168.2.11")),
                    app_name="judge-service",
-                   instance_host="172.17.0.1",
+                   instance_host=environ.get("JUDGE_ADDRESS", "192.168.2.13"),
                    instance_port=9000)
 
 app = Flask(__name__)
