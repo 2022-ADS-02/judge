@@ -1,38 +1,51 @@
+
 import sys
 
+a = 0
+while True:
+    a = a + 1
+    
 sys.setrecursionlimit(10 ** 8)
 
-N = int(input())
-parent = [*map(int, input().split())]
-Remove = int(input())
+N, M = list(map(int, input().split()))
 
-childs = [[] for _ in range(N)]
+arr = [[] for i in range(N)]
+visit = [-1 for i in range(N)]
+visitIndex = [[i] for i in range(N)]
+rel = [list(map(int, input().split())) for _ in range(M)]
 
-rootNode = 0
-rootNodeComplete = False
-for idx in range(len(parent)):
-    if parent[idx] == -1 and not rootNodeComplete:
-        rootNode = idx
-        rootNodeComplete = True
-        continue
-    childs[parent[idx]].append(idx)
-
-for idx in range(len(childs)):
-    if Remove in childs[idx]:
-        childs[idx].remove(Remove)
+for idx in range(len(rel)):
+    _sender = rel[idx][0] - 1
+    _receiver = rel[idx][1] - 1
+    arr[_receiver].append(_sender)
+    visitIndex[_sender].append(_receiver)
 
 
 def search(idx):
-    sum = 0
-    if len(childs[idx]) == 0:
-        return 1
-    else:
-        for i in range(len(childs[idx])):
-            sum += search(childs[idx][i])
-        return sum
+    if visit[idx] > -1:
+        return visit[idx]
 
-if Remove == rootNode:
-    print(0)
-else:
-    print(search(rootNode))
-exit(0)
+    sum = len(arr[idx])
+    for number in arr[idx]:
+        if number in visitIndex[idx]:
+            continue
+        sum += search(number)
+    visit[idx] = sum
+    return sum
+
+
+max = [0]
+for idx in range(len(visit)):
+
+    new = search(idx)
+    if idx == 0:
+        continue
+    if visit[max[len(max) - 1]] < new:
+        max = [idx]
+    elif visit[max[len(max) - 1]] == new:
+        max.append(idx)
+
+for n in range(len(max)):
+    max[n] += 1
+print(*max)
+

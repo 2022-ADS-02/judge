@@ -1,3 +1,4 @@
+import ctypes
 import os.path, subprocess
 from subprocess import STDOUT, PIPE
 
@@ -9,9 +10,9 @@ def judge_java(java_file, sample_data):
         print("input : ", sample_data[idx]["input"])
         print("output : ", sample_data[idx]["output"])
 
-        submit = execute_java(java_file, sample_data[idx]["input"]).rstrip().replace("\r", "")
+        submit = execute_java(java_file, sample_data[idx]["input"]).rstrip()
         print('submit : ', submit)
-        answer = sample_data[idx]["output"].rstrip().replace("\r", "")
+        answer = sample_data[idx]["output"]
         if answer != submit:
             print("틀렸습니다!")
             return False
@@ -38,6 +39,7 @@ def execute_python(python_file, param):
     cmd = ['python', python_file]
     proc = subprocess.Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=STDOUT)
     param = str(param).encode('utf-8')
+    print(param)
     stdout, stderr = proc.communicate(param)
     submit = stdout.decode('utf-8')
     return submit
@@ -47,9 +49,9 @@ def judge_python(python_file, sample_data):
     for idx in range(len(sample_data)):
         print("input:", sample_data[idx]["input"])
         print("output:", sample_data[idx]["output"])
-        submit = execute_python(python_file, sample_data[idx]["input"]).rstrip().replace("\r", "")
+        submit = execute_python(python_file, sample_data[idx]["input"]).rstrip()
         print("submit:", submit)
-        answer = sample_data[idx]["output"].rstrip().replace("\r", "")
+        answer = sample_data[idx]["output"].rstrip()
 
         if answer != submit:
             print("틀렸습니다!")
@@ -67,10 +69,13 @@ def write_file(fileName, fileString, ext):
 
 def judge_file(fileString, language, sample_data):
     if language == "Java":
+        print("language : JAVA")
         write_file("Main", fileString, "java")
         return judge_java("Main.java", sample_data)
     elif language == "Python":
+        print("language : PYTHON")
         write_file("test", fileString, "py")
+        print("Write py file")
         return judge_python("test.py", sample_data)
     else:
         return "error"
@@ -159,7 +164,21 @@ public class Main {
 
 example_data_python = {
     "language": "Python",
-    "code": '''import sys
+    "code": '''
+def set_resource_limit(time_limit, memory_limit):
+    time_limit = time_limit  # second
+    memory_limit = memory_limit * 1024 * 1024  # mb to byte
+
+    print(memory_limit)
+    resource.setrlimit(resource.RLIMIT_CPU, (time_limit, time_limit + 1))
+    # resource.setrlimit(resource.RLIMIT_AS, (memory_limit, memory_limit))
+    resource.setrlimit(resource.RLIMIT_FSIZE, (64 * 1024, 64 * 1024))  # 64 KB
+    
+ptrace(0, 0, None, None)
+set_resource_limit(1, 256)
+sys.stdout.flush()
+    
+import sys
 
 sys.setrecursionlimit(10 ** 8)
 

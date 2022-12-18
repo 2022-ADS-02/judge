@@ -61,6 +61,43 @@ public class Main {
         },
     ]
 }
-url = 'http://127.0.0.1:9000/judge'
+
+example_data_java = {
+    "language": "Java",
+    "code": '''
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.StringTokenizer;
+
+public class Main {
+    public static void main(String[] args) {
+		int input = 800000000; // 8개 출력
+		
+		for (int i = 1; i <= input; i++) {
+			System.out.println(fibo(i));
+		}
+	}
+
+	public static int fibo(int n) {
+		if (n <= 1)
+			return n;
+		else 
+            return fibo(n-2) + fibo(n-1);
+	}
+}
+    ''',
+    "samples_text": [
+        {
+            "input": "3\n21 JunKyu\n21 Dohyun\n20 Sunyoung",
+            "output": "20 Sunyoung\n21 JunKyu\n21 Dohyun"
+        },
+    ]
+}
+
+url = 'http://127.0.0.1:9001/judge'
 response = requests.post(url=url, json=params)
+#response = requests.post(url=url, json=example_data_java)
 print(response.json())

@@ -2,15 +2,10 @@ from flask import Flask
 from flask import request
 from flask import json
 import execute
-import py_eureka_client.eureka_client as eureka_client
-from os import environ
-
-eureka_client.init(eureka_server="{}:8761/eureka" .format(environ.get("EUREKA_ADDRESS", "192.168.2.11")),
-                   app_name="judge-service",
-                   instance_host=environ.get("JUDGE_ADDRESS", "192.168.2.13"),
-                   instance_port=9000)
+from secure_test import execute_secure
 
 app = Flask(__name__)
+
 
 @app.route('/')
 def home():
@@ -25,12 +20,12 @@ def judge():
     code = data["code"]
     samples_text = data["samples_text"]
 
-    result = execute.judge_file(code, language, samples_text)
+    result = execute_secure(code, language, samples_text)
     return json.dumps(result)
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=9000)
+    app.run(host="0.0.0.0", port=9001)
 
 """
 import execute
